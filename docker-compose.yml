@@ -8,6 +8,8 @@ services:
     restart: on-failure
     env_file:
       - backend/.env
+    depends_on:
+      - kafka
     ports:
       - "8080:8000"
     networks:
@@ -34,5 +36,34 @@ services:
       - backend/.env
     ports:
       - "5050:80"
+    networks:
+      - dev
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.0.1
+    hostname: zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    env_file:
+      - backend/.env
+    volumes:
+      - ./zk-data:/var/lib/zookeeper/data
+      - ./zk-log:/var/lib/zookeeper/log
+    networks:
+      - dev
+
+  kafka:
+    image: confluentinc/cp-kafka:7.0.1
+    hostname: kafka
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    env_file:
+      - backend/.env
+    volumes:
+      - ./kafka-data:/var/lib/kafka/data
     networks:
       - dev

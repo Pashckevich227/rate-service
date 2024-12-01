@@ -50,7 +50,7 @@ async def create_rate(info,
                     await db.commit()
                     await db.refresh(new_rate)
                     await db.close()
-        return True
+        return info.dict()
 
     except Exception as error:
         raise HTTPException(status_code=400, detail=str(error))
@@ -77,14 +77,12 @@ async def edit_data(id: int,
         data = await get_rate(id=id, db=db)
         if data:
             edit_info_dict = edit_info.dict(exclude_unset=True)
-            print(data) # <models.Rate object at 0x7fd5a7dccfb0>
-            print(edit_info_dict.items()) # dict_items([('date', '2020-06-04')])
             for field, value in edit_info_dict.items():
                 if hasattr(data, field):
                     setattr(data, field, value)
 
             await db.commit()
-            return True
+            return edit_info_dict
 
     except Exception as error:
         await db.rollback()
@@ -98,13 +96,13 @@ async def delete_data(id: int, db: AsyncSession):
     try:
         data = await db.execute(select(Rate).where(Rate.id == id))
         result = data.scalars().first()
-
-        await db.delete(result)
-        await db.commit()
-        return True
+        if result:
+            await db.delete(result)
+            await db.commit()
+            return True
 
     except Exception as error:
         await db.rollback()
-        raise HTTPException(status_code=400, detail=str(error))
+        raise HTTPException(status_code=404, detail=str(error))
     finally:
         await db.close()

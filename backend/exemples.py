@@ -2,13 +2,13 @@ example_rate = {
     "exemple1": {
         "summary": "Добавление данных",
         "value": {
-            "2020-08-01": [
+            "2020-09-01": [
               {
                   "cargo_type": "Other",
                   "rate": "0.01"
               }
             ],
-            "2020-08-02": [
+            "2020-09-02": [
               {
                   "cargo_type": "Glass",
                   "rate": "0.02"

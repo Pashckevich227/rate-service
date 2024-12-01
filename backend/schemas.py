@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, RootModel
 from fastapi import Query
-from typing import Dict
+from typing import Dict, Optional
 
 
 class PriceRequest(BaseModel):
@@ -47,7 +47,7 @@ class RateEditResponse(BaseModel):
 
 class Rate(BaseModel):
     """Поля страховки"""
-    date: str
-    cargo_type: str
-    rate: str
-    price_id: int
+    date: Optional[str] = None
+    cargo_type: Optional[str] = None
+    rate: Optional[str] = None
+    price_id: Optional[int] = None
