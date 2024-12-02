@@ -42,8 +42,8 @@ async def create_rate(info,
                         status_code=400,
                         detail=f"Duplicate: A rate for date '{date}' and cargo type '{cargo_type}' already exists."
                     )
-
-                new_rate = Rate(date=date, cargo_type=cargo_type, rate=rate)
+                else:
+                    new_rate = Rate(date=date, cargo_type=cargo_type, rate=rate)
 
                 if new_rate:
                     db.add(new_rate)
